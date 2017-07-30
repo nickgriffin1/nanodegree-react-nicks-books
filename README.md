@@ -1,8 +1,9 @@
 # Nick's Books
-==============
 
 ## About
-This project is the first project in the Udacity React Nanodegree Series. It is meant to demonstrate my knowledge of core concepts of React such as Components, state, props and JSX.
+This project is the first project in the Udacity React Nanodegree series.
+
+This project is built with the [Udacity starter template](https://github.com/udacity/reactnd-project-myreads-starter).
 
 ## Running this project
 1. Clone the repo
