@@ -13,6 +13,18 @@ class ListView extends Component {
     })
   }
 
+  updateShelf = (shelf, id) => {
+    // find the correct books and assigns the state update
+    var newState = this.state.books.forEach((book) => {
+      if (book.id === id) {
+        //changes shelf to the correct shelf
+        book.shelf = shelf
+      }
+    })
+    // updates the state which updates the view
+    this.setState({newState});
+  }
+
   render() {
     return (
       <div className="list-books">
@@ -26,7 +38,13 @@ class ListView extends Component {
                     .filter((book) => book.shelf === "currentlyReading")
                     .map(book => (
                       <li>
-                        <Book key={book.id} data={book}/>
+                        <Book
+                          key={book.id}
+                          data={book}
+                          onUpdateShelf={(shelf, id) => {
+                            this.updateShelf(shelf, id)
+                          }}
+                        />
                       </li>
                     ))
                   }
@@ -44,6 +62,9 @@ class ListView extends Component {
                         <Book
                           key={book.id}
                           data={book}
+                          onUpdateShelf={(shelf, id) => {
+                            this.updateShelf(shelf, id)
+                          }}
                         />
                       </li>
                     ))
@@ -59,7 +80,13 @@ class ListView extends Component {
                     .filter((book) => book.shelf === "read")
                     .map(book => (
                       <li>
-                        <Book key={book.id} data={book}/>
+                        <Book
+                          key={book.id}
+                          data={book}
+                          onUpdateShelf={(shelf, id) => {
+                            this.updateShelf(shelf, id)
+                          }}
+                        />
                       </li>
                     ))
                   }

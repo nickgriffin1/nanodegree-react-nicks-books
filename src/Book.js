@@ -2,17 +2,23 @@ import React, { Component } from 'react'
 
 class Book extends Component {
   state = {
-    book: this.props.data,
-    shelf: this.props.data.shelf
+    book: this.props.data
   }
 
+  // handles updating state when a user selects a new shelf for a book
   handleShelf = (e) => {
+    // grabs value selected from click event
     const newShelf = e.target.value
-    console.log(this.state.shelf)
-    this.setState({shelf: newShelf}, () => {
-      console.log(this.state.shelf)
-      this.forceUpdate();
-    })
+    // creates a copy of the state object
+    const book = {...this.state.book}
+    // creates an object that updates the nested state for shelf
+    book.shelf = newShelf
+    // updates the local state
+    this.setState({book})
+    // updates parent state
+    if (this.props.onUpdateShelf) {
+      this.props.onUpdateShelf(newShelf, this.state.book.id)
+    }
   }
 
   render() {
@@ -29,7 +35,7 @@ class Book extends Component {
           ></div>
           <div className="book-shelf-changer">
             <select
-              defaultValue={this.state.shelf}
+              defaultValue={this.state.book.shelf}
               onChange={this.handleShelf}
             >
               <option value="none" disabled>Move to...</option>
