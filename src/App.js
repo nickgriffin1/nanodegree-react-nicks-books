@@ -1,14 +1,11 @@
 import React from 'react'
 import { Route } from 'react-router-dom'
 import './App.css'
+import NotFound from './404'
 import SearchView from './SearchView'
 import ListView from './ListView'
 
 class BooksApp extends React.Component {
-  state = {
-    books: []
-  }
-
   render() {
     return (
       <div className="app">
@@ -21,6 +18,7 @@ class BooksApp extends React.Component {
         <Route exact path='/search' render={() => (
           <SearchView/>
         )}/>
+        <Route path='/404' component={NotFound} />
       </div>
     )
   }

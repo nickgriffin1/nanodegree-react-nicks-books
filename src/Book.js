@@ -9,11 +9,9 @@ class Book extends Component {
   handleShelf = (e) => {
     // grabs value selected from click event
     const newShelf = e.target.value
-    // creates a copy of the state object
     const book = {...this.state.book}
     // creates an object that updates the nested state for shelf
     book.shelf = newShelf
-    // updates the local state
     this.setState({book})
     // updates parent state
     if (this.props.onUpdateShelf) {
@@ -21,9 +19,13 @@ class Book extends Component {
     }
   }
 
+  authorExists(book) {
+    return this.state.book.authors.length > 0 ? true : false
+  }
+
   render() {
     return(
-      <div className="book">
+      <div className="book" key={this.state.book.id}>
         <div className="book-top">
           <div
             className="book-cover"
@@ -47,7 +49,7 @@ class Book extends Component {
           </div>
         </div>
         <div className="book-title">{this.state.book.title}</div>
-        {this.state.book.authors.map(author => (
+        {this.authorExists && this.state.book.authors.map(author => (
           <div className="book-authors">{author}</div>
         ))}
       </div>

@@ -4,7 +4,21 @@ import Book from './Book'
 
 class ListView extends Component {
   state = {
-    books: []
+    books: [],
+    categories: [
+      {
+        title: "Currently Reading",
+        key: "currentlyReading"
+      },
+      {
+        title: "Want to Read",
+        key: "wantToRead"
+      },
+      {
+        title: "Read",
+        key: "read"
+      }
+    ]
   }
 
   componentDidMount() {
@@ -23,6 +37,11 @@ class ListView extends Component {
     })
     // updates the state which updates the view
     this.setState({newState});
+    // update server
+    BooksAPI.update(id, shelf).then((data) => {
+      console.log("Got data return from UPDATE")
+      console.log(data)
+    })
   }
 
   render() {
@@ -30,69 +49,29 @@ class ListView extends Component {
       <div className="list-books">
         <div className="list-books-content">
           <div>
-            <div className="bookshelf">
-              <h2 className="bookshelf-title">Currently Reading</h2>
-              <div className="bookshelf-books">
-                <ol className="books-grid">
-                  {this.state.books
-                    .filter((book) => book.shelf === "currentlyReading")
-                    .map(book => (
-                      <li>
-                        <Book
-                          key={book.id}
-                          data={book}
-                          onUpdateShelf={(shelf, id) => {
-                            this.updateShelf(shelf, id)
-                          }}
-                        />
-                      </li>
-                    ))
-                  }
-                </ol>
+            {this.state.categories.map(category => (
+              <div className="bookshelf">
+                <h2 className="bookshelf-title">{category.title}</h2>
+                <div className="bookshelf-books">
+                  <ol className="books-grid">
+                    {this.state.books
+                      .filter((book) => book.shelf === category.key)
+                      .map(book => (
+                        <li>
+                          <Book
+                            key={book.id}
+                            data={book}
+                            onUpdateShelf={(shelf, id) => {
+                              this.updateShelf(shelf, id)
+                            }}
+                          />
+                        </li>
+                      ))
+                    }
+                  </ol>
+                </div>
               </div>
-            </div>
-            <div className="bookshelf">
-              <h2 className="bookshelf-title">Want to Read</h2>
-              <div className="bookshelf-books">
-                <ol className="books-grid">
-                  {this.state.books
-                    .filter((book) => book.shelf === "wantToRead")
-                    .map((book, index) => (
-                      <li>
-                        <Book
-                          key={book.id}
-                          data={book}
-                          onUpdateShelf={(shelf, id) => {
-                            this.updateShelf(shelf, id)
-                          }}
-                        />
-                      </li>
-                    ))
-                  }
-                </ol>
-              </div>
-            </div>
-            <div className="bookshelf">
-              <h2 className="bookshelf-title">Read</h2>
-              <div className="bookshelf-books">
-                <ol className="books-grid">
-                  {this.state.books
-                    .filter((book) => book.shelf === "read")
-                    .map(book => (
-                      <li>
-                        <Book
-                          key={book.id}
-                          data={book}
-                          onUpdateShelf={(shelf, id) => {
-                            this.updateShelf(shelf, id)
-                          }}
-                        />
-                      </li>
-                    ))
-                  }
-                </ol>
-              </div>
-            </div>
+            ))}
           </div>
         </div>
         <div className="open-search">
