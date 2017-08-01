@@ -4,12 +4,29 @@ import Book from './Book'
 
 class SearchView extends Component {
   state = {
-    books: []
+    books: [],
+    possibleSearches: [
+      'Android', 'Art', 'Artificial Intelligence', 'Astronomy', 'Austen',
+      'Baseball', 'Basketball', 'Bhagat', 'Biography', 'Brief', 'Business',
+      'Camus', 'Cervantes', 'Christie', 'Classics', 'Comics', 'Cook', 'Cricket',
+      'Cycling', 'Desai', 'Design', 'Development', 'Digital Marketing', 'Drama',
+      'Drawing', 'Dumas', 'Education', 'Everything', 'Fantasy', 'Film',
+      'Finance', 'First', 'Fitness', 'Football', 'Future', 'Games', 'Gandhi',
+      'History', 'History', 'Homer', 'Horror', 'Hugo', 'Ibsen', 'Journey',
+      'Kafka', 'King', 'Lahiri', 'Larsson', 'Learn', 'Literary Fiction', 'Make',
+      'Manage', 'Marquez', 'Money', 'Mystery', 'Negotiate', 'Painting',
+      'Philosophy', 'Photography', 'Poetry', 'Production', 'Program Javascript',
+       'Programming', 'React', 'Redux', 'River', 'Robotics', 'Rowling',
+       'Satire', 'Science Fiction', 'Shakespeare', 'Singh', 'Swimming', 'Tale',
+       'Thrun', 'Time', 'Tolstoy', 'Travel', 'Ultimate', 'Virtual Reality',
+       'Web Development', 'Ios'
+    ]
   }
 
   handleSearch = (e) => {
-    const entry = e.target.value
-    if (entry !== null && entry !== '') {
+    const entry = this.formatEntry(e.target.value)
+    if (this.state.possibleSearches.indexOf(entry) > -1) {
+      console.log("hit")
       BooksAPI.search(entry, 3).then((data) => {
         console.log(data)
         if (!data.error) {
@@ -17,6 +34,10 @@ class SearchView extends Component {
         }
       })
     }
+  }
+
+  formatEntry = (entry) => {
+    return entry.charAt(0).toUpperCase() + entry.slice(1).toLowerCase();
   }
 
   bookFound = () => {

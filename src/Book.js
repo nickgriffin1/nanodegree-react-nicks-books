@@ -49,9 +49,11 @@ class Book extends Component {
           </div>
         </div>
         <div className="book-title">{this.state.book.title}</div>
-        {this.authorExists && this.state.book.authors.map(author => (
-          <div className="book-authors">{author}</div>
-        ))}
+        {this.state.authors !== undefined &&
+          this.state.book.authors.map(author => (
+            <div className="book-authors">{author}</div>
+          ))
+        }
       </div>
     )
   }
