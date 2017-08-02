@@ -16,10 +16,10 @@ class SearchView extends Component {
       'Kafka', 'King', 'Lahiri', 'Larsson', 'Learn', 'Literary Fiction', 'Make',
       'Manage', 'Marquez', 'Money', 'Mystery', 'Negotiate', 'Painting',
       'Philosophy', 'Photography', 'Poetry', 'Production', 'Program Javascript',
-       'Programming', 'React', 'Redux', 'River', 'Robotics', 'Rowling',
-       'Satire', 'Science Fiction', 'Shakespeare', 'Singh', 'Swimming', 'Tale',
-       'Thrun', 'Time', 'Tolstoy', 'Travel', 'Ultimate', 'Virtual Reality',
-       'Web Development', 'Ios'
+      'Programming', 'React', 'Redux', 'River', 'Robotics', 'Rowling',
+      'Satire', 'Science Fiction', 'Shakespeare', 'Singh', 'Swimming', 'Tale',
+      'Thrun', 'Time', 'Tolstoy', 'Travel', 'Ultimate', 'Virtual Reality',
+      'Web Development', 'Ios'
     ],
     categories: this.props.categories
   }
@@ -27,9 +27,11 @@ class SearchView extends Component {
   handleSearch = (e) => {
     const entry = this.formatEntry(e.target.value)
     if (this.state.possibleSearches.indexOf(entry) > -1) {
-      BooksAPI.search(entry, 3).then((data) => {
+      BooksAPI.search(entry, 20).then((data) => {
         if (!data.error) {
           this.setState({books: data})
+        } else {
+          console.log("Error: " + data.error)
         }
       })
     } else {
@@ -48,9 +50,9 @@ class SearchView extends Component {
   updateShelf = (id, shelf) => {
     // update server
     BooksAPI.update({id: id}, shelf).then((data) => {
-      // error handling
       if (!data.error) {
         console.log("book added to shelf")
+        // TODO add UI for informing users of a book being added
       } else {
         console.log("API error from BooksAPI.update()")
         console.log("Error", data.error)

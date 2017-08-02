@@ -36,7 +36,7 @@ class Book extends Component {
           ></div>
           <div className="book-shelf-changer">
             <select
-              defaultValue={this.state.shelf || "none"}
+              defaultValue={this.state.shelf}
               onChange={this.handleShelf}
             >
               <option value="none" disabled>Move to...</option>
