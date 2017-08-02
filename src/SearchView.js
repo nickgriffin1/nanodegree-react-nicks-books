@@ -17,16 +17,21 @@ class SearchView extends Component {
       'Manage', 'Marquez', 'Money', 'Mystery', 'Negotiate', 'Painting',
       'Philosophy', 'Photography', 'Poetry', 'Production', 'Program Javascript',
       'Programming', 'React', 'Redux', 'River', 'Robotics', 'Rowling',
-      'Satire', 'Science Fiction', 'Shakespeare', 'Singh', 'Swimming', 'Tale',
+      'Satire', 'Science fiction', 'Shakespeare', 'Singh', 'Swimming', 'Tale',
       'Thrun', 'Time', 'Tolstoy', 'Travel', 'Ultimate', 'Virtual Reality',
-      'Web Development', 'Ios'
+      'Web Development', 'iOS'
     ],
     categories: this.props.categories
   }
 
   handleSearch = (e) => {
     const entry = this.formatEntry(e.target.value)
-    if (this.state.possibleSearches.indexOf(entry) > -1) {
+    // this array helps us by ignoring case
+    const lowerCasePossibleSearches = []
+    this.state.possibleSearches.forEach(item => {
+      lowerCasePossibleSearches.push(item.toLowerCase());
+    })
+    if (lowerCasePossibleSearches.indexOf(entry.toLowerCase()) > -1) {
       BooksAPI.search(entry, 20).then((data) => {
         if (!data.error) {
           this.setState({books: data})
@@ -39,6 +44,7 @@ class SearchView extends Component {
     }
   }
 
+  // kind of a hack so I don't have to reformat possibleSearches
   formatEntry = (entry) => {
     return entry.charAt(0).toUpperCase() + entry.slice(1).toLowerCase();
   }
@@ -60,6 +66,16 @@ class SearchView extends Component {
     })
   }
 
+  // needed because pictures aren't always defined
+  getPic = (book) => {
+    console.log("book", book)
+    try {
+      return book.imageLinks.thumbnail
+    } catch (e) {
+      console.log("No thumbnail found: " + e)
+    }
+  }
+
   render() {
     return(
       <div className="search-books">
@@ -76,15 +92,14 @@ class SearchView extends Component {
         <div className="search-books-results">
           <ol className="books-grid">
             {this.bookFound && this.state.books.map(book => (
-              <li>
+              <li key={book.id}>
                 <Book
-                  key={book.id}
                   id={book.id}
                   title={book.title}
                   shelf={"none"}
                   authors={book.authors}
+                  imageURL={this.getPic(book)}
                   categories={this.state.categories}
-                  imageURL={book.imageLinks.thumbnail}
                   onUpdateShelf={(shelf, id) => this.updateShelf(shelf, id)}
                 />
               </li>
