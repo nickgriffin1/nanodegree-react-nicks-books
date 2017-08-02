@@ -26,13 +26,14 @@ class SearchView extends Component {
   handleSearch = (e) => {
     const entry = this.formatEntry(e.target.value)
     if (this.state.possibleSearches.indexOf(entry) > -1) {
-      console.log("hit")
       BooksAPI.search(entry, 3).then((data) => {
         console.log(data)
         if (!data.error) {
           this.setState({books: data})
         }
       })
+    } else {
+      this.setState({books: []})
     }
   }
 
@@ -67,11 +68,15 @@ class SearchView extends Component {
         </div>
         <div className="search-books-results">
           <ol className="books-grid">
-            {this.bookFound && this.state.books.map(book => (
+            {this.bookFound && this.state.books.map((book, index) => (
               <li>
                 <Book
-                  key={book.id}
-                  data={book}
+                  key={index}
+                  id={book.id}
+                  title={book.title}
+                  shelf={book.shelf}
+                  authors={book.authors}
+                  imageURL={book.imageLinks.thumbnail}
                 />
               </li>
             ))}

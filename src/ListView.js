@@ -56,11 +56,15 @@ class ListView extends Component {
                   <ol className="books-grid">
                     {this.state.books
                       .filter((book) => book.shelf === category.key)
-                      .map(book => (
+                      .map((book, index) => (
                         <li>
                           <Book
-                            key={book.id}
-                            data={book}
+                            key={index}
+                            id={book.id}
+                            title={book.title}
+                            shelf={book.shelf}
+                            authors={book.authors}
+                            imageURL={book.imageLinks.thumbnail}
                             onUpdateShelf={(shelf, id) => {
                               this.updateShelf(shelf, id)
                             }}
