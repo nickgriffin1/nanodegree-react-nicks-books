@@ -21,17 +21,17 @@ class SearchView extends Component {
       'Thrun', 'Time', 'Tolstoy', 'Travel', 'Ultimate', 'Virtual Reality',
       'Web Development', 'iOS'
     ],
+    lowerCasePossibleSearches: [],
     categories: this.props.categories
   }
 
   handleSearch = (e) => {
     const entry = this.formatEntry(e.target.value)
     // this array helps us by ignoring case
-    const lowerCasePossibleSearches = []
     this.state.possibleSearches.forEach(item => {
-      lowerCasePossibleSearches.push(item.toLowerCase());
+      this.state.lowerCasePossibleSearches.push(item.toLowerCase());
     })
-    if (lowerCasePossibleSearches.indexOf(entry.toLowerCase()) > -1) {
+    if (this.state.lowerCasePossibleSearches.indexOf(entry.toLowerCase()) > -1) {
       BooksAPI.search(entry, 20).then((data) => {
         if (!data.error) {
           this.setState({books: data})
