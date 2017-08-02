@@ -20,14 +20,14 @@ class SearchView extends Component {
        'Satire', 'Science Fiction', 'Shakespeare', 'Singh', 'Swimming', 'Tale',
        'Thrun', 'Time', 'Tolstoy', 'Travel', 'Ultimate', 'Virtual Reality',
        'Web Development', 'Ios'
-    ]
+    ],
+    categories: this.props.categories
   }
 
   handleSearch = (e) => {
     const entry = this.formatEntry(e.target.value)
     if (this.state.possibleSearches.indexOf(entry) > -1) {
       BooksAPI.search(entry, 3).then((data) => {
-        console.log(data)
         if (!data.error) {
           this.setState({books: data})
         }
@@ -45,20 +45,25 @@ class SearchView extends Component {
     return this.state.books > 0 ? true : false
   }
 
+  updateShelf = (id, shelf) => {
+    // update server
+    BooksAPI.update({id: id}, shelf).then((data) => {
+      // error handling
+      if (!data.error) {
+        console.log("book added to shelf")
+      } else {
+        console.log("API error from BooksAPI.update()")
+        console.log("Error", data.error)
+      }
+    })
+  }
+
   render() {
     return(
       <div className="search-books">
         <div className="search-books-bar">
           <a className="close-search" href="/">Close</a>
           <div className="search-books-input-wrapper">
-            {/*
-              NOTES: The search from BooksAPI is limited to a particular set of search terms.
-              You can find these search terms here:
-              https://github.com/udacity/reactnd-project-myreads-starter/blob/master/SEARCH_TERMS.md
-
-              However, remember that the BooksAPI.search method DOES search by title or author. So, don't worry if
-              you don't find a specific author or title. Every search is limited by search terms.
-            */}
             <input
               type="text"
               placeholder="Search by title or author"
@@ -74,9 +79,11 @@ class SearchView extends Component {
                   key={index}
                   id={book.id}
                   title={book.title}
-                  shelf={book.shelf}
+                  shelf={"none"}
                   authors={book.authors}
+                  categories={this.state.categories}
                   imageURL={book.imageLinks.thumbnail}
+                  onUpdateShelf={(shelf, id) => this.updateShelf(shelf, id)}
                 />
               </li>
             ))}

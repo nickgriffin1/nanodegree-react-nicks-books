@@ -6,6 +6,7 @@ class Book extends Component {
     shelf: this.props.shelf,
     title: this.props.title,
     authors: this.props.authors,
+    categories: this.props.categories,
     imageURL: this.props.imageURL
   }
 
@@ -17,7 +18,7 @@ class Book extends Component {
     this.setState({shelf: newShelf})
     // updates parent state
     if (this.props.onUpdateShelf) {
-      this.props.onUpdateShelf(newShelf, this.state.id)
+      this.props.onUpdateShelf(this.state.id, newShelf)
     }
   }
 
@@ -35,14 +36,14 @@ class Book extends Component {
           ></div>
           <div className="book-shelf-changer">
             <select
-              defaultValue={this.state.shelf}
+              defaultValue={this.state.shelf || "none"}
               onChange={this.handleShelf}
             >
               <option value="none" disabled>Move to...</option>
-              <option value="currentlyReading">Currently Reading</option>
-              <option value="wantToRead">Want to Read</option>
-              <option value="read">Read</option>
-              <option value="none">None</option>
+              {this.state.categories.map(category => (
+                <option value={category.key}>{category.title}</option>
+              ))}
+              <option value="none">None - Delete from Shelf</option>
             </select>
           </div>
         </div>

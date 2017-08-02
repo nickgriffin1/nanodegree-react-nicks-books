@@ -5,20 +5,8 @@ import Book from './Book'
 class ListView extends Component {
   state = {
     books: [],
-    categories: [
-      {
-        title: "Currently Reading",
-        key: "currentlyReading"
-      },
-      {
-        title: "Want to Read",
-        key: "wantToRead"
-      },
-      {
-        title: "Read",
-        key: "read"
-      }
-    ]
+    bookShelf: this.props.bookShelf,
+    categories: this.props.categories
   }
 
   componentDidMount() {
@@ -27,24 +15,30 @@ class ListView extends Component {
     })
   }
 
-  updateShelf = (shelf, id) => {
-    // find the correct books and assigns the state update
-    var newState = this.state.books.forEach((book) => {
-      if (book.id === id) {
-        //changes shelf to the correct shelf
-        book.shelf = shelf
-      }
-    })
-    // updates the state which updates the view
-    this.setState({newState});
-    // update server
-    BooksAPI.update(id, shelf).then((data) => {
-      console.log("Got data return from UPDATE")
-      console.log(data)
-    })
+  updateShelf = (id, shelf) => {
+    const currentBook = this.state.books.filter((book) => book.id === id)
+    console.log("book going from " + currentBook.shelf+ " to " + shelf)
+    if (currentBook.shelf !== shelf) {
+      // update server
+      BooksAPI.update({id: id}, shelf).then((data) => {
+        if (!data.error) {
+          const booksCopy = [...this.state.books]
+          booksCopy.forEach((book) => {
+            if (book.id === id) {
+              book.shelf = shelf
+            }
+          })
+          this.setState({books: booksCopy})
+        } else {
+          console.log("API error from BooksAPI.update()")
+          console.log("Error", data.error)
+        }
+      })
+    }
   }
 
   render() {
+    console.log(this.props.bookShelf)
     return (
       <div className="list-books">
         <div className="list-books-content">
@@ -59,15 +53,14 @@ class ListView extends Component {
                       .map((book, index) => (
                         <li>
                           <Book
-                            key={index}
+                            key={book.id}
                             id={book.id}
                             title={book.title}
                             shelf={book.shelf}
                             authors={book.authors}
                             imageURL={book.imageLinks.thumbnail}
-                            onUpdateShelf={(shelf, id) => {
-                              this.updateShelf(shelf, id)
-                            }}
+                            categories={this.state.categories}
+                            onUpdateShelf={(shelf, id) => this.updateShelf(shelf, id)}
                           />
                         </li>
                       ))
