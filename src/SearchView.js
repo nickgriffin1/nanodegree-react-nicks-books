@@ -75,10 +75,10 @@ class SearchView extends Component {
         </div>
         <div className="search-books-results">
           <ol className="books-grid">
-            {this.bookFound && this.state.books.map((book, index) => (
+            {this.bookFound && this.state.books.map(book => (
               <li>
                 <Book
-                  key={index}
+                  key={book.id}
                   id={book.id}
                   title={book.title}
                   shelf={"none"}

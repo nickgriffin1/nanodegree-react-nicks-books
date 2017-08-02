@@ -38,22 +38,20 @@ class ListView extends Component {
   }
 
   render() {
-    console.log(this.props.bookShelf)
     return (
       <div className="list-books">
         <div className="list-books-content">
           <div>
             {this.state.categories.map(category => (
-              <div className="bookshelf">
+              <div className="bookshelf" key={category.key}>
                 <h2 className="bookshelf-title">{category.title}</h2>
                 <div className="bookshelf-books">
                   <ol className="books-grid">
                     {this.state.books
                       .filter((book) => book.shelf === category.key)
-                      .map((book, index) => (
-                        <li>
+                      .map(book => (
+                        <li key={book.id}>
                           <Book
-                            key={book.id}
                             id={book.id}
                             title={book.title}
                             shelf={book.shelf}

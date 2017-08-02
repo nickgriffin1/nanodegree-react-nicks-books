@@ -41,7 +41,10 @@ class Book extends Component {
             >
               <option value="none" disabled>Move to...</option>
               {this.state.categories.map(category => (
-                <option value={category.key}>{category.title}</option>
+                <option
+                  key={category.key}
+                  value={category.key}
+                >{category.title}</option>
               ))}
               <option value="none">None - Delete from Shelf</option>
             </select>
@@ -49,8 +52,8 @@ class Book extends Component {
         </div>
         <div className="book-title">{this.state.title}</div>
         {this.state.authors !== undefined &&
-          this.state.authors.map(author => (
-            <div className="book-authors">{author}</div>
+          this.state.authors.map((author, index) => (
+            <div className="book-authors" key={index}>{author}</div>
           ))
         }
       </div>
