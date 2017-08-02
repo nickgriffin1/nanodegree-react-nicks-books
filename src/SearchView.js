@@ -26,7 +26,7 @@ class SearchView extends Component {
   }
 
   handleSearch = (e) => {
-    const entry = this.formatEntry(e.target.value)
+    const entry = e.target.value
     // this array helps us by ignoring case
     this.state.possibleSearches.forEach(item => {
       this.state.lowerCasePossibleSearches.push(item.toLowerCase());
@@ -42,11 +42,6 @@ class SearchView extends Component {
     } else {
       this.setState({books: []})
     }
-  }
-
-  // kind of a hack so I don't have to reformat possibleSearches
-  formatEntry = (entry) => {
-    return entry.charAt(0).toUpperCase() + entry.slice(1).toLowerCase();
   }
 
   bookFound = () => {
