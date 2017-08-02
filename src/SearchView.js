@@ -25,12 +25,15 @@ class SearchView extends Component {
     categories: this.props.categories
   }
 
-  handleSearch = (e) => {
-    const entry = e.target.value
-    // this array helps us by ignoring case
+  componentDidMount() {
+    // this array helps us ignore case, yes I'm lazy
     this.state.possibleSearches.forEach(item => {
       this.state.lowerCasePossibleSearches.push(item.toLowerCase());
     })
+  }
+
+  handleSearch = (e) => {
+    const entry = e.target.value
     if (this.state.lowerCasePossibleSearches.indexOf(entry.toLowerCase()) > -1) {
       BooksAPI.search(entry, 20).then((data) => {
         if (!data.error) {
@@ -63,7 +66,6 @@ class SearchView extends Component {
 
   // needed because pictures aren't always defined
   getPic = (book) => {
-    console.log("book", book)
     try {
       return book.imageLinks.thumbnail
     } catch (e) {
