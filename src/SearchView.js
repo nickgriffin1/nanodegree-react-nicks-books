@@ -93,7 +93,7 @@ class SearchView extends Component {
                 <Book
                   id={book.id}
                   title={book.title}
-                  shelf={"none"}
+                  shelf={book.shelf}
                   authors={book.authors}
                   imageURL={this.getPic(book)}
                   categories={this.state.categories}
