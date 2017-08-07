@@ -1,40 +1,26 @@
 import React, { Component } from 'react'
 import * as BooksAPI from './BooksAPI'
-import Book from './Book'
+import BookShelf from './BookShelf'
 
 class ListView extends Component {
   state = {
-    books: [],
-    bookShelf: this.props.bookShelf,
-    categories: this.props.categories
+    books: []
   }
 
-  componentDidMount() {
+  componentWillMount() {
     BooksAPI.getAll().then((books) => {
       this.setState({ books })
     })
   }
 
-  updateShelf = (id, shelf) => {
-    const currentBook = this.state.books.filter((book) => book.id === id)
-    console.log("book going from " + currentBook.shelf+ " to " + shelf)
-    if (currentBook.shelf !== shelf) {
-      // update server
-      BooksAPI.update({id: id}, shelf).then((data) => {
-        if (!data.error) {
-          const booksCopy = [...this.state.books]
-          booksCopy.forEach((book) => {
-            if (book.id === id) {
-              book.shelf = shelf
-            }
-          })
-          this.setState({books: booksCopy})
-        } else {
-          console.log("API error from BooksAPI.update()")
-          console.log("Error", data.error)
-        }
-      })
-    }
+  setBooks = (books) => {
+    this.setState({ books })
+    this.props.onUpdateApp(books)
+  }
+
+  filterBooks = (key) => {
+    console.log('this.state.books', this.state.books)
+    return this.state.books.filter(book => book.shelf === key)
   }
 
   render() {
@@ -42,30 +28,16 @@ class ListView extends Component {
       <div className="list-books">
         <div className="list-books-content">
           <div>
-            {this.state.categories.map(category => (
-              <div className="bookshelf" key={category.key}>
-                <h2 className="bookshelf-title">{category.title}</h2>
-                <div className="bookshelf-books">
-                  <ol className="books-grid">
-                    {this.state.books
-                      .filter((book) => book.shelf === category.key)
-                      .map(book => (
-                        <li key={book.id}>
-                          <Book
-                            id={book.id}
-                            title={book.title}
-                            shelf={book.shelf}
-                            authors={book.authors}
-                            imageURL={book.imageLinks.thumbnail}
-                            categories={this.state.categories}
-                            onUpdateShelf={(shelf, id) => this.updateShelf(shelf, id)}
-                          />
-                        </li>
-                      ))
-                    }
-                  </ol>
-                </div>
-              </div>
+            {this.props.categories.map(category => (
+              <BookShelf
+                key={category.key}
+                name={category.key}
+                title={category.title}
+                books={this.state.books}
+                categories={this.props.categories}
+                filteredBooks={this.filterBooks(category.key)}
+                onUpdateBookShelf={(books) => this.setBooks(books)}
+              />
             ))}
           </div>
         </div>

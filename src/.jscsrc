@@ -1,0 +1,6 @@
+{
+    "preset": "airbnb",
+    "fileExtensions": [".js", "jscs"],
+    "requireSemicolons": false,
+    "requireTrailingComma": false
+}

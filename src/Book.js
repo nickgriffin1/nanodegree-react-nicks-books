@@ -2,36 +2,33 @@ import React, { Component } from 'react'
 
 class Book extends Component {
   state = {
-    id: this.props.id,
-    shelf: this.props.shelf,
-    title: this.props.title,
-    authors: this.props.authors,
-    categories: this.props.categories,
-    imageURL: this.props.imageURL
+    shelf: this.props.shelf
   }
 
   // handles updating state when a user selects a new shelf for a book
   handleShelf = (e) => {
     // grabs value selected from click event
     const newShelf = e.target.value
+
     // creates an object that updates the nested state for shelf
-    this.setState({shelf: newShelf})
+    this.setState({ shelf: newShelf })
+
     // updates parent state
     if (this.props.onUpdateShelf) {
-      this.props.onUpdateShelf(this.state.id, newShelf)
+      this.props.onUpdateShelf(this.props.id, newShelf)
     }
   }
 
   render() {
-    return(
-      <div className="book" key={this.state.id}>
+    return (
+      <div className="book" key={this.props.id}>
         <div className="book-top">
           <div
             className="book-cover"
             style={{
               width: 128,
               height: 193,
-              backgroundImage: `url(${this.state.imageURL})`
+              backgroundImage: `url(${this.props.imageURL})`
             }}
           ></div>
           <div className="book-shelf-changer">
@@ -40,7 +37,7 @@ class Book extends Component {
               onChange={this.handleShelf}
             >
               <option value="none" disabled>Move to...</option>
-              {this.state.categories.map(category => (
+              {this.props.categories.map(category => (
                 <option
                   key={category.key}
                   value={category.key}
@@ -50,9 +47,9 @@ class Book extends Component {
             </select>
           </div>
         </div>
-        <div className="book-title">{this.state.title}</div>
-        {this.state.authors !== undefined &&
-          this.state.authors.map((author, index) => (
+        <div className="book-title">{this.props.title}</div>
+        {this.props.authors !== undefined
+          && this.props.authors.map((author, index) => (
             <div className="book-authors" key={index}>{author}</div>
           ))
         }

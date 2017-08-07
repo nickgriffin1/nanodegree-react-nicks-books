@@ -37,29 +37,27 @@ class SearchView extends Component {
     if (this.state.lowerCasePossibleSearches.indexOf(entry.toLowerCase()) > -1) {
       BooksAPI.search(entry, 20).then((data) => {
         if (!data.error) {
-          this.setState({books: data})
+          this.setState({ books: data })
         } else {
-          console.log("Error: " + data.error)
+          console.log('Error: ' + data.error)
         }
       })
     } else {
-      this.setState({books: []})
+      this.setState({ books: [] })
     }
   }
 
-  bookFound = () => {
-    return this.state.books > 0 ? true : false
-  }
+  bookFound = () => this.state.books > 0 ? true : false
 
   updateShelf = (id, shelf) => {
     // update server
-    BooksAPI.update({id: id}, shelf).then((data) => {
+    BooksAPI.update({ id: id }, shelf).then((data) => {
       if (!data.error) {
-        console.log("book added to shelf")
         // TODO add UI for informing users of a book being added
+        console.log('book added to shelf')
       } else {
-        console.log("API error from BooksAPI.update()")
-        console.log("Error", data.error)
+        console.log('API error from BooksAPI.update()')
+        console.log('Error', data.error)
       }
     })
   }
@@ -69,12 +67,27 @@ class SearchView extends Component {
     try {
       return book.imageLinks.thumbnail
     } catch (e) {
-      console.log("No thumbnail found: " + e)
+      console.log('No thumbnail found: ' + e)
     }
   }
 
+  setShelf = (bookID) => {
+    var shelf = 'none'
+    Object.keys(this.props.bookShelf).forEach((item) => {
+      const currentShelf = this.props.bookShelf[item]
+      currentShelf.forEach((id) => {
+        if (id === bookID) {
+          shelf = item
+          return
+        }
+      })
+    })
+    return shelf
+  }
+
   render() {
-    return(
+    console.log('this.props.bookShelf', this.props.bookShelf)
+    return (
       <div className="search-books">
         <div className="search-books-bar">
           <a className="close-search" href="/">Close</a>
@@ -93,7 +106,7 @@ class SearchView extends Component {
                 <Book
                   id={book.id}
                   title={book.title}
-                  shelf={book.shelf}
+                  shelf={this.setShelf(book.id)}
                   authors={book.authors}
                   imageURL={this.getPic(book)}
                   categories={this.state.categories}
