@@ -86,7 +86,6 @@ class SearchView extends Component {
   }
 
   render() {
-    console.log('this.props.bookShelf', this.props.bookShelf)
     return (
       <div className="search-books">
         <div className="search-books-bar">

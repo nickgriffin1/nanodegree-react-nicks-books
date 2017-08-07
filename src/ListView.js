@@ -18,10 +18,7 @@ class ListView extends Component {
     this.props.onUpdateApp(books)
   }
 
-  filterBooks = (key) => {
-    console.log('this.state.books', this.state.books)
-    return this.state.books.filter(book => book.shelf === key)
-  }
+  filterBooks = (key) => this.state.books.filter(book => book.shelf === key)
 
   render() {
     return (
